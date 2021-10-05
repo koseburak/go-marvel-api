@@ -26,12 +26,12 @@ using go search the Marvel universe characters via marvel api
 * Generate coverage report
     > $ go tool cover -html="out/test-reports/cover.out" -o="out/test-reports/cover-report.html"
     
-    ![cover-report](assets\cover-report.png)
+    ![cover-report](assets/cover-report.png)
 
 * Generate func based coverage report
     > $ go tool cover -func="out/test-reports/cover.out" > out/test-reports/cover-func-report.out
 
-    ![cover-func-based](assets\cover-func-based.png)
+    ![cover-func-based](assets/cover-func-based.png)
 
 </br>
 </br>
@@ -46,13 +46,13 @@ You can join the Circleci Project Team <a href="https://app.circleci.com/pipelin
 </br>
 
 [build] stage run after commit pushed to remote for all branches in Circleci workflows.
-![circleci-build-release](assets\circleci-build-release.png)
+![circleci-build-release](assets/circleci-build-release.png)
 </br>
 
 You can find the build artifact and test reports under Circleci Artifacts menu of current build.
-![circleci-build-artifacts](assets\circleci-build-artifacts.png)
+![circleci-build-artifacts](assets/circleci-build-artifacts.png)
 </br>
 
 * [publish-github-release] stage is running only after the tag pushed to remote. It's publish the new release automatically including the binary/assets with your tag name on Github.
-![github-auto-releae-output](assets\github-auto-releae-output.png)
+![github-auto-releae-output](assets/github-auto-releae-output.png)
 </br>
