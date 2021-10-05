@@ -1,0 +1,44 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.17.1
+    steps:
+      - checkout
+
+      - run:
+          name: run tests
+          command: |
+            go test ./... -v -coverprofile=cover.out
+            go tool cover -html=cover.out -o=result-cover.html
+            go tool cover -func=cover.out > result-cover-func.out
+            gotestsum --junitfile result-unit-tests.xml
+      
+      - run:
+          name: prepare artifacts dir and test reports
+          command: |
+            mkdir -p /tmp/artifacts
+            mkdir -p /tmp/artifacts/test-results
+            mv result-* /tmp/artifacts/test-results
+
+      - run:
+          name: build
+          command: |
+            go build -a -v -o /tmp/artifacts/marvel .
+
+      - store_artifacts:
+          path: /tmp/artifacts
+
+# Invoke jobs via workflows
+workflows:
+  marvel-api-workflow:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
