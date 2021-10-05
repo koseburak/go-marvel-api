@@ -157,3 +157,33 @@ func TestGetCharactersWithUnmarshalData(t *testing.T) {
 		return
 	}
 }
+
+func TestGetCharactersWithInvalidBaseMarvelURL(t *testing.T) {
+
+	enteredCharacterName := "vision"
+
+	mockConfig := &config.Configuration{
+		MarvelAPIBaseURL: "InvalidURL",
+	}
+	marvelClient := NewMarvelClient(mockConfig, &http.Client{})
+	_, err := marvelClient.GetCharacters(enteredCharacterName)
+	if err == nil {
+		t.Error("TestGetCharactersSuccess failed.")
+		return
+	}
+}
+
+func TestGetCharactersWithMalformedURL(t *testing.T) {
+
+	enteredCharacterName := "vision"
+
+	mockConfig := &config.Configuration{
+		MarvelAPIBaseURL: "ssh://Invalid URL &# ",
+	}
+	marvelClient := NewMarvelClient(mockConfig, &http.Client{})
+	_, err := marvelClient.GetCharacters(enteredCharacterName)
+	if err == nil {
+		t.Error("TestGetCharactersSuccess failed.")
+		return
+	}
+}
