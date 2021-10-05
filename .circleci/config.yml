@@ -33,12 +33,45 @@ jobs:
       - store_artifacts:
           path: /tmp/artifacts
 
+  publish-github-release:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.17.1
+    steps:
+        - checkout
+        - run: go get -u github.com/mitchellh/gox
+        - run: go get -u github.com/tcnksm/ghr
+        - run: go get -u github.com/stevenmatthewt/semantics
+        - run:
+            name: cross compile
+            command: |
+              gox -os="linux darwin windows" -arch="amd64" -output="dist/marvelcli_{{.OS}}_{{.Arch}}"
+              cd dist/ && gzip * && pwd && ls -la
+        - attach_workspace:
+            at: ./artifacts
+        - run:
+            name: "publish release on GitHub"
+            command: |
+              tag=$(semantics --output-tag)
+              echo $tag
+              VERSION=$tag
+              ghr -t "${GITHUB_TOKEN}" -u "${CIRCLE_PROJECT_USERNAME}" -r "${CIRCLE_PROJECT_REPONAME}" -c "${CIRCLE_SHA1}" ${VERSION} ./artifacts
+
 # Invoke jobs via workflows
 workflows:
   marvel-api-workflow:
     jobs:
       - build:
           filters:
+            branches:
+              only:
+                - init
+      - publish-github-release:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
             branches:
               only:
                 - init
