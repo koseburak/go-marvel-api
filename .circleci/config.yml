@@ -11,7 +11,7 @@ jobs:
       - checkout
 
       - run:
-          name: run tests
+          name: Run Tests
           command: |
             go test ./... -v -coverprofile=cover.out
             go tool cover -html=cover.out -o=result-cover.html
@@ -19,14 +19,14 @@ jobs:
             gotestsum --junitfile result-unit-tests.xml
       
       - run:
-          name: prepare artifacts dir and test reports
+          name: Prepare Artifacts Dir and Test Reports
           command: |
             mkdir -p /tmp/artifacts
             mkdir -p /tmp/artifacts/test-results
             mv result-* /tmp/artifacts/test-results
 
       - run:
-          name: build
+          name: Build
           command: |
             go build -a -v -o /tmp/artifacts/marvel .
 
