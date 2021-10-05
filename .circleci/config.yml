@@ -1,6 +1,6 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 version: 2.1
-
+  
 # Define a job to be invoked later in a workflow.
 jobs:
   build:
@@ -47,10 +47,11 @@ jobs:
               gox -os="linux darwin windows" -arch="amd64" -output="dist/marvelcli_{{.OS}}_{{.Arch}}"
               cd dist/ && gzip * && pwd && ls -la
         - attach_workspace:
-            at: ./artifacts
+            at: ./dist
         - run:
             name: "publish release on GitHub"
-            command: ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace $CIRCLE_TAG dist/
+            command: |
+              ghr -t $GITHUB_TOKEN -delete $CIRCLE_TAG dist/
 
 # Invoke jobs via workflows
 workflows:
@@ -60,13 +61,13 @@ workflows:
           filters:
             branches:
               only:
-                - init
+                - main
       - publish-github-release:
           requires:
             - build
           filters:
             tags:
-              only: /^v.*/
+              only: /^v*/
             branches:
               only:
-                - init
+                - main
