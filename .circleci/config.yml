@@ -55,7 +55,7 @@ jobs:
               tag=$(semantics --output-tag)
               echo $tag
               VERSION=$tag
-              ghr -t "${GITHUB_TOKEN}" -u "${CIRCLE_PROJECT_USERNAME}" -r "${CIRCLE_PROJECT_REPONAME}" -c "${CIRCLE_SHA1}" ${VERSION} ./artifacts
+              ghr -t "${GITHUB_TOKEN}" -u "${CIRCLE_PROJECT_USERNAME}" -r "${CIRCLE_PROJECT_REPONAME}" -c "${CIRCLE_SHA1}" -n "Version ${VERSION}" ./artifacts
 
 # Invoke jobs via workflows
 workflows:
