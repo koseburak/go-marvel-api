@@ -41,7 +41,6 @@ jobs:
         - checkout
         - run: go get -u github.com/mitchellh/gox
         - run: go get -u github.com/tcnksm/ghr
-        - run: go get -u github.com/stevenmatthewt/semantics
         - run:
             name: cross compile
             command: |
@@ -51,10 +50,7 @@ jobs:
             at: ./artifacts
         - run:
             name: "publish release on GitHub"
-            command: |
-              tag=$(semantics --output-tag)
-              VERSION=$tag
-              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -n ${VERSION} ./artifacts
+            command: ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace $CIRCLE_TAG dist/
 
 # Invoke jobs via workflows
 workflows:
